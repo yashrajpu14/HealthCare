@@ -33,7 +33,7 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: ./frontend/hclfrontend
       args:
         VITE_API_BASE_URL: ${VITE_API_BASE_URL}
     container_name: healthcare_frontend
@@ -42,3 +42,8 @@ services:
       - backend
     ports:
       - "3000:80"
+
+  llm:
+    build: ./llm
+    ports:
+      - "8000:8000"
