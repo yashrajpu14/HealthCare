@@ -8,6 +8,7 @@ import SignUp from "../pages/LoginModule/SignUp";
 import Dashboard from "../pages/DashboardModule/Dashboard";
 import Profile from "../pages/ProfileModule/Profile";
 import ChangePassword from "../pages/ProfileModule/ChangePassword";
+import Home from "../pages/HomeModule/Home";
 
 function AppRoutes() {
   return (
@@ -16,8 +17,6 @@ function AppRoutes() {
       <Route element={<PublicOnly />}>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
       </Route>
 
       {/* Protected */}
@@ -27,8 +26,9 @@ function AppRoutes() {
         <Route path="/change-password" element={<ChangePassword />} />
       </Route>
 
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      {/* Home and catch-all */}
+      <Route path="/" element={<Home />} />
+      <Route path="*" element={<Home />} />
     </Routes>
   );
 }
