@@ -19,4 +19,7 @@ public class User
     [Required] public string Role { get; set; } = "User";
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAtUtc { get; set; } = DateTime.UtcNow;
+
+    public string? ProfileImageUrl { get; set; }
+    public string? ProfileImagePublicId { get; set; }
 }

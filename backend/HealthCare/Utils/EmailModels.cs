@@ -2,16 +2,15 @@
 
 public sealed class EmailRequest
 {
-    public required string To { get; init; }
-    public string? ToName { get; init; }
+    public string To { get; set; } = string.Empty;
+    public string? ToName { get; set; }
 
-    public required string Subject { get; init; }
+    // Either provide Subject+HtmlBody OR use TemplateKey (+ Variables)
+    public string? Subject { get; set; }
+    public string? HtmlBody { get; set; }
 
-    // Send either HtmlBody OR (TemplateKey + Variables)
-    public string? HtmlBody { get; init; }
+    public string? TemplateKey { get; set; }                 // e.g., "verify_account"
+    public Dictionary<string, string>? Variables { get; set; } // e.g., { name, verifyUrl, expiresIn }
 
-    public string? TemplateKey { get; init; }   // e.g. "verify_account", "reset_password"
-    public Dictionary<string, string>? Variables { get; init; }
-
-    public bool SaveToSentItems { get; init; } = true;
+    public bool SaveToSentItems { get; set; } = true;
 }

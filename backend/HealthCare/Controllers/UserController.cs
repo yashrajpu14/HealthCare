@@ -40,8 +40,8 @@ public class UsersController : ControllerBase
     // PUT: /api/users/me
     [HttpPut("me")]
     public async Task<ActionResult<UserProfileResponse>> UpdateMyProfile(
-        [FromBody] UpdateUserProfileRequest req,
-        CancellationToken ct)
+    [FromForm] UpdateUserProfileRequest req,
+    CancellationToken ct)
     {
         var userId = GetUserId();
 

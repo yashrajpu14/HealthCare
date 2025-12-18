@@ -14,4 +14,8 @@ export const userService = {
   changePassword: async ({ currentPassword, newPassword }) => {
     return await userApi.changePassword({ currentPassword, newPassword });
   },
+  async updateMeMultipart(formData) {
+    const res = await userApi.updateMeMultipart(formData);
+    return res.data;
+  },
 };

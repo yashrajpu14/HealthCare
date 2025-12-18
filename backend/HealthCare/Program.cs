@@ -1,8 +1,11 @@
 ﻿using HealthCare.Data;
 using HealthCare.Repositories.Implementations;
 using HealthCare.Repositories.Interfaces;
+using HealthCare.Services;
 using HealthCare.Services.Implementations;
 using HealthCare.Services.Interfaces;
+using HealthCare.Utils;
+using HealthCare.Utils.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -51,6 +54,11 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IDoctorAdminRepository, DoctorAdminRepository>();
+builder.Services.AddScoped<IAdminDoctorService, AdminDoctorService>();
+builder.Services.Configure<CloudinaryOptions>(builder.Configuration.GetSection("Cloudinary"));
+builder.Services.AddScoped<IImageStorage, CloudinaryImageStorage>();
+builder.Services.AddScoped<IEmailSender, GraphEmailSender>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();

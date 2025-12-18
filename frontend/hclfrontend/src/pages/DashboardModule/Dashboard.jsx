@@ -13,7 +13,7 @@ const Dashboard = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
-  const [me, setMe] = useState({ name: "", email: "", role: "" });
+  const [me, setMe] = useState({ name: "", email: "", role: "", ProfileImageUrl: "" });
   const [loadingMe, setLoadingMe] = useState(true);
 
   const dashboardCards = [
@@ -35,6 +35,7 @@ const Dashboard = () => {
           name: data?.name ?? "",
           email: data?.email ?? "",
           role: data?.role ?? "",
+          ProfileImageUrl: data?.profileImageUrl ?? "avtaar.jpeg",
         });
       } catch (err) {
         // If auth fails, user should go to login (token expired or invalid)
@@ -115,7 +116,7 @@ const Dashboard = () => {
         <div className="header-right">
           <div className="profile-section" ref={menuRef}>
             <img
-              src="https://via.placeholder.com/40/667eea/ffffff?text=Profile"
+              src={me.ProfileImageUrl}
               alt="Profile"
               className="profile-avatar"
               onClick={handleProfileClick}

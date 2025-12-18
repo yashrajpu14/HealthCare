@@ -6,7 +6,8 @@ public record UserProfileResponse(
     string Name,
     string Email,
     string? Phone,
-    string Role
+    string Role,
+    string? ProfileImageUrl
 );
 
 public class UpdateUserProfileRequest
@@ -19,4 +20,5 @@ public class UpdateUserProfileRequest
 
     [MaxLength(20)]
     public string? Phone { get; set; }
+    public IFormFile? ProfileImage { get; set; }
 }

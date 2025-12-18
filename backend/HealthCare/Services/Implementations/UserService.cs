@@ -1,6 +1,7 @@
 ﻿using global::HealthCare.DTOs;
 using global::HealthCare.Repositories.Interfaces;
 using global::HealthCare.Services.Interfaces;
+using HealthCare.Utils;
 
 namespace HealthCare.Services.Implementations;
 
@@ -9,14 +10,18 @@ namespace HealthCare.Services.Implementations;
 public sealed class UserService : IUserService
 {
     private readonly IUserRepository _users;
-    public UserService(IUserRepository users) => _users = users;
-
+    private readonly IImageStorage _images;
+    public UserService(IUserRepository users, IImageStorage images)
+    {
+        _users = users;
+        _images = images;
+    }
     public async Task<UserProfileResponse?> GetMyProfileAsync(Guid userId, CancellationToken ct = default)
     {
         var user = await _users.GetByIdAsync(userId, ct);
         if (user == null) return null;
 
-        return new UserProfileResponse(user.Name, user.Email, user.Phone, user.Role);
+        return new UserProfileResponse(user.Name, user.Email, user.Phone, user.Role, user.ProfileImageUrl);
     }
 
     public async Task<(bool ok, string? error, UserProfileResponse? data)> UpdateMyProfileAsync(
@@ -34,8 +39,25 @@ public sealed class UserService : IUserService
         if (string.IsNullOrWhiteSpace(name)) return (false, "Name is required", null);
         if (string.IsNullOrWhiteSpace(email)) return (false, "Email is required", null);
 
-        var emailExists = await _users.EmailExistsAsync(email, userId, ct);
-        if (emailExists) return (false, "Email already in use", null);
+        if (await _users.EmailExistsAsync(email, userId, ct))
+            return (false, "Email already in use", null);
+
+        // NEW: upload image if provided
+        if (req.ProfileImage is not null)
+        {
+            var oldPublicId = user.ProfileImagePublicId;
+
+            var (url, publicId) = await _images.UploadUserImageAsync(req.ProfileImage, userId.ToString(), ct);
+
+            user.ProfileImageUrl = url;
+            user.ProfileImagePublicId = publicId;
+
+            // delete old after successful upload (best-effort)
+            if (!string.IsNullOrWhiteSpace(oldPublicId))
+            {
+                try { await _images.DeleteAsync(oldPublicId, ct); } catch { /* ignore */ }
+            }
+        }
 
         user.Name = name;
         user.Email = email;
@@ -44,8 +66,12 @@ public sealed class UserService : IUserService
 
         await _users.SaveChangesAsync(ct);
 
-        return (true, null, new UserProfileResponse(user.Name, user.Email, user.Phone, user.Role));
+        return (true, null, new UserProfileResponse(
+            user.Name, user.Email, user.Phone, user.Role,
+            user.ProfileImageUrl
+        ));
     }
+
     public async Task<(bool ok, string error)> ChangeMyPasswordAsync(
         Guid userId,
         ChangePasswordRequest req,
@@ -66,4 +92,6 @@ public sealed class UserService : IUserService
         await _users.SaveChangesAsync(ct);
         return (true, "");
     }
+
+
 }
