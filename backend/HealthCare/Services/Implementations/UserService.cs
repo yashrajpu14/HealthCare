@@ -46,4 +46,24 @@ public sealed class UserService : IUserService
 
         return (true, null, new UserProfileResponse(user.Name, user.Email, user.Phone, user.Role));
     }
+    public async Task<(bool ok, string error)> ChangeMyPasswordAsync(
+        Guid userId,
+        ChangePasswordRequest req,
+        CancellationToken ct)
+    {
+        var user = await _users.GetByIdAsync(userId, ct);
+        if (user == null) return (false, "UNAUTHORIZED");
+
+        if (!BCrypt.Net.BCrypt.Verify(req.CurrentPassword, user.PasswordHash))
+            return (false, "Current password is incorrect");
+
+        if (BCrypt.Net.BCrypt.Verify(req.NewPassword, user.PasswordHash))
+            return (false, "New password must be different from current password");
+
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(req.NewPassword);
+        user.UpdatedAtUtc = DateTime.UtcNow;
+
+        await _users.SaveChangesAsync(ct);
+        return (true, "");
+    }
 }

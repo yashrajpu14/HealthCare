@@ -53,4 +53,17 @@ public class UsersController : ControllerBase
 
         return Ok(data);
     }
+
+    [HttpPut("me/password")]
+    public async Task<IActionResult> ChangeMyPassword([FromBody] ChangePasswordRequest req, CancellationToken ct)
+    {
+        var userId = GetUserId();
+
+        var (ok, error) = await _users.ChangeMyPasswordAsync(userId, req, ct);
+
+        if (!ok && error == "UNAUTHORIZED") return Unauthorized();
+        if (!ok) return BadRequest(error);
+
+        return Ok(new { message = "Password changed successfully" });
+    }
 }
