@@ -231,3 +231,28 @@
         flex: 0 0 85%;
     }
 }
+
+/* The Pharmacy Button in Navbar */
+.btn-pharmacy {
+    background-color: #10b981;
+    /* Emerald Green */
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 15px;
+    /* Spacing from Contact link */
+    transition: background 0.3s;
+}
+
+.btn-pharmacy:hover {
+    background-color: #059669;
+    /* Darker Green on hover */
+}
+
+/* Adjustments for Hero Buttons if you added the second one */
+.hero-buttons {
+    margin-top: 20px;
+}

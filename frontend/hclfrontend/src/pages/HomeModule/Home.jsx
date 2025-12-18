@@ -1,12 +1,11 @@
 // src/pages/Home.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./Home.css"; // Ensure your CSS is imported here
+import "./Home.css";
 
 const Home = () => {
   const navigate = useNavigate();
 
-  // --- 1. Added Testimonial Data ---
   const testimonials = [
     {
       id: 1,
@@ -58,11 +57,19 @@ const Home = () => {
           <h2>MediCare+</h2>
         </div>
         <div className="navbar-links">
+          {/* 🆕 NEW FEATURE BUTTON */}
+          <button
+            className="btn btn-pharmacy"
+            onClick={() => navigate("/medicines-nearby")}
+            title="Find nearest chemist"
+          >
+            💊 Medicines Nearby
+          </button>
+
           <a href="#contact" className="nav-link">
             Contact Us
           </a>
 
-          {/* Navigate to the existing Login route */}
           <button
             className="btn btn-secondary"
             onClick={() => navigate("/login")}
@@ -70,7 +77,6 @@ const Home = () => {
             Login
           </button>
 
-          {/* Navigate to the existing Signup route */}
           <button
             className="btn btn-primary"
             onClick={() => navigate("/signup")}
@@ -85,8 +91,23 @@ const Home = () => {
         <section className="hero">
           <div className="hero-text">
             <h1>Your Health, Our Priority</h1>
-            <p>Book appointments with top specialists instantly.</p>
-            <button className="btn btn-primary large">Book Now</button>
+            <p>
+              Book appointments with top specialists instantly or find medicine
+              near you.
+            </p>
+
+            <div className="hero-buttons">
+              <button className="btn btn-primary large">Book Now</button>
+
+              {/* Optional: Also adding it here for visibility */}
+              <button
+                className="btn btn-secondary large"
+                onClick={() => navigate("/medicines-nearby")}
+                style={{ marginLeft: "10px" }}
+              >
+                Find Pharmacy
+              </button>
+            </div>
           </div>
         </section>
 
@@ -106,7 +127,7 @@ const Home = () => {
           </div>
         </section>
 
-        {/* --- 2. Added Testimonials Section Here --- */}
+        {/* --- Testimonials Section --- */}
         <section className="testimonials-section">
           <h3>Patient Stories</h3>
           <div className="slider-container">

@@ -11,6 +11,7 @@ import ChangePassword from "../pages/ProfileModule/ChangePassword";
 import ApproveDoctors from "../pages/AdminModule/ApproveDoctors";
 import UploadLicense from "../pages/DoctorModule/UploadLicense";
 import Home from "../pages/HomeModule/Home";
+import PharmacyFinder from "../pages/PharmacyFinder";
 
 function AppRoutes() {
   return (
@@ -19,6 +20,9 @@ function AppRoutes() {
       <Route element={<PublicOnly />}>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/medicines-nearby" element={<PharmacyFinder />} />
+        <Route path="/" element={<Home />} />
+        <Route path="*" element={<Home />} />
       </Route>
 
       {/* Protected */}
