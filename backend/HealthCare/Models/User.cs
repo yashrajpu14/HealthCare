@@ -12,6 +12,11 @@ public class User
 
     [Required] public string PasswordHash { get; set; } = string.Empty;
 
+    [MaxLength(20)]
+    public string? Phone { get; set; }
+
     // "User" or "Admin"
     [Required] public string Role { get; set; } = "User";
+    public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAtUtc { get; set; } = DateTime.UtcNow;
 }

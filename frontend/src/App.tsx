@@ -6,6 +6,7 @@ import Admin from "./pages/Admin";
 import { AuthProvider, useAuth } from "./auth/AuthContext";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
 import { RoleRoute } from "./auth/RoleRoute";
+import ProfilePage from "./pages/Profile";
 
 function Home() {
   const a = useAuth();
@@ -36,6 +37,7 @@ export default function App() {
           <Route path="/admin" element={<RoleRoute role="Admin"><Admin /></RoleRoute>} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

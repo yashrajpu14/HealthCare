@@ -1,15 +1,20 @@
 ﻿using HealthCare.Models;
+using HealthCare.Services.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace HealthCare.Services;
+namespace HealthCare.Services.Implementations;
 
-public class JwtTokenService
+public class JwtTokenService : IJwtTokenService
 {
     private readonly IConfiguration _config;
-    public JwtTokenService(IConfiguration config) => _config = config;
+
+    public JwtTokenService(IConfiguration config)
+    {
+        _config = config;
+    }
 
     public string CreateAccessToken(User user)
     {
@@ -20,13 +25,14 @@ public class JwtTokenService
 
         var claims = new List<Claim>
         {
-            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new(ClaimTypes.Email, user.Email),
-            new(ClaimTypes.Role, user.Role),
-            new("name", user.Name),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // GUID (important ✔)
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Role, user.Role),
+            new Claim(ClaimTypes.Name, user.Name),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        var creds = new SigningCredentials(
+        var credentials = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
             SecurityAlgorithms.HmacSha256
         );
@@ -36,7 +42,7 @@ public class JwtTokenService
             audience: audience,
             claims: claims,
             expires: DateTime.UtcNow.AddMinutes(minutes),
-            signingCredentials: creds
+            signingCredentials: credentials
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
